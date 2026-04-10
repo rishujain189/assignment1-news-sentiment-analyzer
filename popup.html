@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Sentiment Analyzer</title>
+  <link rel="stylesheet" href="popup.css">
+  <!-- Importing Inter font for a premium look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        <h1>Sentiment AI</h1>
+      </div>
+      <button id="settingsBtn" class="icon-btn" title="Settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      </button>
+    </header>
+
+    <!-- Settings View -->
+    <section id="settingsView" class="view hidden">
+      <h2>Configuration</h2>
+      <p class="subtitle">Enter your Gemini API key to begin analyzing page sentiments.</p>
+      <div class="form-group">
+        <label for="apiKey">Gemini API Key</label>
+        <input type="password" id="apiKey" placeholder="AIzaSy...">
+      </div>
+      <button id="saveKeyBtn" class="primary-btn">Save Content</button>
+      <button id="cancelSettingsBtn" class="text-btn hidden">Cancel</button>
+      <div id="settingsMsg" class="status-msg"></div>
+    </section>
+
+    <!-- Main Analysis View -->
+    <section id="mainView" class="view">
+      <div class="hero">
+        <div class="glow-circle"></div>
+        <img src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg" alt="Gemini Sparkle" class="hero-icon">
+      </div>
+      <h2>Ready to Analyze</h2>
+      <p class="subtitle">Extract news from this page to see the consensus.</p>
+      <button id="analyzeBtn" class="primary-btn pulse-hover">Analyze Current Page</button>
+      <p id="errorMsg" class="error-msg"></p>
+    </section>
+
+    <!-- Loading View -->
+    <section id="loadingView" class="view hidden">
+      <div class="loader">
+        <div class="spinner"></div>
+      </div>
+      <h2>Analyzing Sentiments...</h2>
+      <p class="subtitle">Asking Gemini for its thoughts.</p>
+    </section>
+
+    <!-- Results View -->
+    <section id="resultsView" class="view hidden">
+      <div class="result-header">
+        <span class="label">Central Motion</span>
+        <h2 id="motionText">--</h2>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card favor">
+          <span class="stat-title">In Favor</span>
+          <span id="favorCount" class="stat-value">0</span>
+        </div>
+        <div class="stat-card against">
+          <span class="stat-title">Against</span>
+          <span id="againstCount" class="stat-value">0</span>
+        </div>
+        <div class="stat-card neutral">
+          <span class="stat-title">Neutral</span>
+          <span id="neutralCount" class="stat-value">0</span>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="bar-chart-track">
+          <div id="favorBar" class="bar favor-bar" style="width: 0%"></div>
+          <div id="neutralBar" class="bar neutral-bar" style="width: 0%"></div>
+          <div id="againstBar" class="bar against-bar" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div id="breakdownSection" class="breakdown-section hidden">
+        <h3 class="breakdown-header">Detailed Analysis</h3>
+        
+        <div id="favorDetails" class="breakdown-card favor-bg hidden">
+          <h4 class="stance-title">In Favor</h4>
+          <p id="favorSummary" class="summary-text"></p>
+          <div class="recommendation-box">
+            <span class="rec-label">Top Article:</span>
+            <span id="favorTop" class="rec-text"></span>
+          </div>
+        </div>
+
+        <div id="againstDetails" class="breakdown-card against-bg hidden">
+          <h4 class="stance-title">Against</h4>
+          <p id="againstSummary" class="summary-text"></p>
+          <div class="recommendation-box">
+            <span class="rec-label">Top Article:</span>
+            <span id="againstTop" class="rec-text"></span>
+          </div>
+        </div>
+
+        <div id="neutralDetails" class="breakdown-card neutral-bg hidden">
+          <h4 class="stance-title">Neutral</h4>
+          <p id="neutralSummary" class="summary-text"></p>
+          <div class="recommendation-box">
+            <span class="rec-label">Top Article:</span>
+            <span id="neutralTop" class="rec-text"></span>
+          </div>
+        </div>
+      </div>
+
+      <button id="resetBtn" class="outline-btn mt-4">Analyze Another Page</button>
+    </section>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "News Sentiment Analyzer",
+  "version": "1.0",
+  "description": "Analyzes the sentiments of news aggregator articles to determine the overall consensus using Gemini.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}
