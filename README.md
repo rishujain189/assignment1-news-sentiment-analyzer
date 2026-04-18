@@ -3,7 +3,9 @@
 A premium Google Chrome Extension that scans news aggregator pages, extracts relevant headlines, and uses Google's **Gemini 2.5 Flash** model to analyze the overall consensus of the articles. 
 
 ## 🎥 Video Demonstration
-[**▶️ Click Here to Watch the Extension in Action!**](https://youtu.be/1kadp-e64aQ)
+[**▶️ Click Here to Watch the Extension in Action!**](PUT_YOUR_NEW_VIDEO_LINK_HERE)
+
+> *(Note: Replace `PUT_YOUR_NEW_VIDEO_LINK_HERE` above with your video link!)*
 
 ## ✨ Features
 - **Smart Text Extraction:** Intelligently parses complex DOM structures to cleanly lift out pure article text.
